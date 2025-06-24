@@ -15,6 +15,7 @@ public class UserValidationHandler {
         Map<String, User> error = Map.of(ex.getMessage(), ex.getUser());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(UserInvalidEmailNotFoundException.class)
     public ResponseEntity<Map<String, User>> handleEmailNotFound(UserInvalidEmailNotFoundException ex) {
         Map<String, User> error = Map.of(ex.getMessage(), ex.getUser());
