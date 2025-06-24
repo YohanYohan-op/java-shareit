@@ -2,10 +2,7 @@ package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ItemRepositoryImpl implements ItemRepository {
@@ -21,7 +18,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item findByItemId(Long itemId) {
         for (List<Item> items : storage.values()) {
             for (Item item : items) {
-                if (item.getId() == itemId) {
+                if (Objects.equals(item.getId(), itemId)) {
                     return item;
                 }
             }
@@ -47,7 +44,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item update(Long userId, Long itemId, Item item) {
         for (Item i : storage.get(userId)) {
             int index = storage.get(userId).indexOf(i);
-            if (userId == i.getUserId() && itemId == i.getId()) {
+            if (Objects.equals(userId, i.getUserId()) && Objects.equals(itemId, i.getId())) {
                 Item updated = storage.get(userId).get(index);
                 updated.setName(item.getName() == null ? updated.getName() : item.getName());
                 updated.setDescription(item.getDescription() == null ? updated.getDescription() : item.getDescription());
@@ -105,7 +102,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public void deleteByUserIdAndItemId(Long userId, Long itemId) {
-        storage.get(userId).removeIf(item -> item.getId() == itemId);
+        storage.get(userId).removeIf(item -> Objects.equals(item.getId(), itemId));
     }
 
     private long getId() {
