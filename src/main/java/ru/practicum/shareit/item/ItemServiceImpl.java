@@ -15,43 +15,37 @@ public class ItemServiceImpl implements ItemService {
     private final UserService userService;
 
 
-    public Item addNewItem(Long userId, Item item) {
+    public ItemDto addNewItem(Long userId, ItemDto item) {
         if (userService.getAllUsers().stream().noneMatch(u -> u.getId().equals(userId))) {
             throw new UserNotFoundException("User not found");
         }
-        if (item.getAvailable() == null || item.getDescription() == null || item.getDescription().isBlank() || item.getName() == null || item.getName().isBlank()) {
-            throw new IllegalArgumentException("Available is null");
-        }
         item.setUserId(userId);
-        return itemRepository.save(item);
+        return ItemMapper.toItemDto(itemRepository.save(ItemMapper.toItem(item)));
     }
 
-    public List<Item> getItems(Long userId) {
-        return itemRepository.findByUserId(userId);
+    public List<ItemDto> getItems(Long userId) {
+        return itemRepository.findByUserId(userId).stream().map(ItemMapper::toItemDto).toList();
     }
 
-    public List<Item> findItemForNameOrDescription(String text) {
+    public List<ItemDto> findItemForNameOrDescription(String text) {
         if (text == null || text.isBlank()) {
             return new ArrayList<>();
         }
-        return itemRepository.findForNameOrDesc(text);
+        return itemRepository.findForNameOrDesc(text).stream().map(ItemMapper::toItemDto).toList();
     }
 
-    public Item updateItem(Long userId, Long itemId, Item item) {
+    public ItemDto updateItem(Long userId, Long itemId, ItemDto item) {
         if (userService.getAllUsers().stream().noneMatch(u -> u.getId().equals(userId))) {
             throw new UserNotFoundException("User not found");
         }
-        /*if (itemId == null || itemId == 0) {
-            return itemRepository.update(userId, item);
-        }*/
         if (userId <= 0 || itemId < 0) {
             throw new IllegalArgumentException("Invalid userId or itemId");
         }
-        return itemRepository.update(userId, itemId, item);
+        return ItemMapper.toItemDto(itemRepository.update(userId, itemId, ItemMapper.toItem(item)));
     }
 
-    public Item getItem(Long itemId) {
-        return itemRepository.findByItemId(itemId);
+    public ItemDto getItem(Long itemId) {
+        return ItemMapper.toItemDto(itemRepository.findByItemId(itemId));
     }
 
     public void deleteItem(Long userId, Long itemId) {

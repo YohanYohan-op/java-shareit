@@ -3,15 +3,15 @@ package ru.practicum.shareit.item;
 import java.util.List;
 
 public interface ItemService {
-    Item addNewItem(Long userId, Item item);
+    ItemDto addNewItem(Long userId, ItemDto item);
 
-    List<Item> getItems(Long userId);
+    List<ItemDto> getItems(Long userId);
 
-    Item getItem(Long itemId);
+    ItemDto getItem(Long itemId);
 
-    Item updateItem(Long userId, Long itemId, Item item);
+    ItemDto updateItem(Long userId, Long itemId, ItemDto item);
 
-    List<Item> findItemForNameOrDescription(String text);
+    List<ItemDto> findItemForNameOrDescription(String text);
 
     void deleteItem(Long userId, Long itemId);
 }

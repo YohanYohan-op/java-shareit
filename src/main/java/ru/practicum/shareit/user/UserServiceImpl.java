@@ -13,16 +13,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Override
-    public List<User> getAllUsers() {
-        return repository.findAll();
+    public List<UserDto> getAllUsers() {
+        return repository.findAll().stream().map(UserMapper::toUserDto).toList();
     }
 
     @Override
-    public User getUser(Long userId) {
+    public UserDto getUser(Long userId) {
         if (userId == null || userId <= 0 || repository.findAll().getLast().getId() < userId || repository.findAll().stream().noneMatch(u -> u.getId().equals(userId))) {
             throw new UserInvalidEmailNotFoundException("User with id = " + userId + " not found");
         }
-        return repository.getUser(userId);
+        return UserMapper.toUserDto(repository.getUser(userId));
     }
 
     @Override
@@ -34,46 +34,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new UserInvalidEmailNotFoundException("Email is blank", user);
-        }
-        if (!user.getEmail().contains("@")) {
-            throw new UserInvalidEmailNotFoundException("Email is not valid", user);
-        }
+    public UserDto saveUser(UserDto user) {
         if (repository.findAll().stream()
                 .anyMatch(u -> u.getEmail().equals(user.getEmail()))) {
-            throw new UserInvalidException("Email already exists", user);
+            throw new UserInvalidException("Email already exists", UserMapper.toUser(user));
         }
-        return repository.save(user);
+        return UserMapper.toUserDto(repository.save(UserMapper.toUser(user)));
     }
 
     @Override
-    public User update(User user, Long userId) {
+    public UserDto update(UserDto user, Long userId) {
         if (userId == null || userId <= 0 || repository.findAll().getLast().getId() < userId
             || repository.findAll().stream().noneMatch(u -> u.getId().equals(userId))) {
             throw new UserInvalidEmailNotFoundException("User with id = " + userId + " not found");
         }
         if (user.getEmail() == null && user.getName() == null) {
-            throw new UserInvalidEmailNotFoundException("Email or name is blank", user);
+            throw new UserInvalidEmailNotFoundException("Email or name is blank", UserMapper.toUser(user));
         }
         if (user.getEmail() != null && user.getName() != null && user.getEmail().contains("@")) {
             if (repository.findAll().stream()
                     .anyMatch(u -> u.getEmail().equals(user.getEmail()))) {
-                throw new UserInvalidException("Email already exists", user);
+                throw new UserInvalidException("Email already exists", UserMapper.toUser(user));
             }
-            return repository.update(user, userId).isPresent() ? repository.update(user, userId).get() : null;
+            return repository.update(UserMapper.toUser(user), userId).isPresent() ? UserMapper.toUserDto(repository.update(UserMapper.toUser(user), userId).get()) : null;
         }
         if (user.getEmail() != null && user.getName() == null && user.getEmail().contains("@")) {
             if (repository.findAll().stream()
                     .anyMatch(u -> u.getEmail().equals(user.getEmail()))) {
-                throw new UserInvalidException("Email already exists", user);
+                throw new UserInvalidException("Email already exists", UserMapper.toUser(user));
             }
-            return repository.update(user, "email", userId).isPresent() ? repository.update(user, "email", userId).get() : null;
+            return repository.update(UserMapper.toUser(user), "email", userId).isPresent()
+                    ? UserMapper.toUserDto(repository.update(UserMapper.toUser(user), "email", userId).get()) : null;
 
         }
-        if (user.getEmail() == null && user.getName() != null) {
-            return repository.update(user, "name", userId).isPresent() ? repository.update(user, "name", userId).get() : null;
+        if (user.getEmail() == null) {
+            return repository.update(UserMapper.toUser(user), "name", userId).isPresent()
+                    ? UserMapper.toUserDto(repository.update(UserMapper.toUser(user), "name", userId).get()) : null;
         }
         return null;
     }

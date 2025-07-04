@@ -1,12 +1,12 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class UserRepositoryImpl implements UserRepository {
     private final List<User> users = new ArrayList<>();
 
@@ -38,7 +38,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .filter(u -> u.getId().equals(userId))
                 .findFirst()
                 .map(foundUser -> {
-                    // Обновляем конкретное поле в зависимости от config
                     foundUser.setEmail(user.getEmail());
                     foundUser.setName(user.getName());
                     return foundUser;
@@ -51,7 +50,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .filter(u -> u.getId().equals(userId))
                 .findFirst()
                 .map(foundUser -> {
-                    // Обновляем конкретное поле в зависимости от config
                     switch (config.toLowerCase()) {
                         case "email":
                             foundUser.setEmail(user.getEmail());

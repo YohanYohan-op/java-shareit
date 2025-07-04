@@ -18,12 +18,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable("userId") Long userId) {
+    public UserDto getUser(@PathVariable("userId") Long userId) {
         return userService.getUser(userId);
     }
 
@@ -33,12 +33,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User saveNewUser(@RequestBody @Valid User user) {
+    public UserDto saveNewUser(@RequestBody @Valid UserDto user) {
         return userService.saveUser(user);
     }
 
     @PatchMapping("/{userId}")
-    public User updateUser(@RequestBody @Valid User user, @PathVariable("userId") Long userId) {
+    public UserDto updateUser(@RequestBody UserDto user, @PathVariable("userId") Long userId) {
         return userService.update(user, userId);
     }
 }

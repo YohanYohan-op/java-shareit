@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +13,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<Item> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.getItems(userId);
     }
 
     @GetMapping("/{itemId}")
-    public Item get(@RequestHeader("X-Sharer-User-Id") Long userId,
-                    @PathVariable(name = "itemId") Long itemId) {
+    public ItemDto get(@RequestHeader("X-Sharer-User-Id") Long userId,
+                       @PathVariable(name = "itemId") Long itemId) {
         return itemService.getItem(itemId);
     }
 
     @GetMapping("/search")
-    public List<Item> search(@RequestHeader("X-Sharer-User-Id") Long userId,
-                             @RequestParam("text") String text) {
+    public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                @RequestParam("text") String text) {
         return itemService.findItemForNameOrDescription(text);
     }
 
     @PostMapping
-    public Item add(@RequestHeader("X-Sharer-User-Id") Long userId,
-                    @RequestBody Item item) {
+    public ItemDto add(@RequestHeader("X-Sharer-User-Id") Long userId,
+                       @Valid @RequestBody ItemDto item) {
         return itemService.addNewItem(userId, item);
     }
 
@@ -44,16 +47,9 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public Item updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                           @PathVariable(name = "itemId") String itemId,
-                           @RequestBody Item item) {
-        Long num;
-        try {
-            num = "null".equals(itemId) || itemId == null ? null : Long.parseLong(itemId);
-            // остальной код
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid item ID format");
-        }
-        return itemService.updateItem(userId, num, item);
+    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
+                              @PathVariable(name = "itemId") Long itemId,
+                              @RequestBody ItemDto item) {
+        return itemService.updateItem(userId, itemId, item);
     }
 }

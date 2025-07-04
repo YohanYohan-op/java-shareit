@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Component
+@Repository
 public class ItemRepositoryImpl implements ItemRepository {
     Map<Long, List<Item>> storage = new HashMap<>();
     private long lastId = 1;
@@ -25,20 +25,6 @@ public class ItemRepositoryImpl implements ItemRepository {
         }
         return null;
     }
-
-    /*@Override
-    public Item update(Long userId, Item item) {
-        Item updated = storage.get(userId).stream().filter(i -> i.getName().toLowerCase().equals(item.getName().toLowerCase())).findFirst().orElse(null);
-        if (updated == null) {
-            throw new ItemNotFoundException("Item not found", item);
-        }
-        updated.setDescription(item.getDescription() == null ? updated.getDescription() : item.getDescription());
-        updated.setAvailable(item.getAvailable() == null ? updated.getAvailable() : item.getAvailable());
-        updated.setOwner(item.getOwner() == null ? updated.getOwner() : item.getOwner());
-        updated.setRequest(item.getRequest() == null ? updated.getRequest() : item.getRequest());
-        storage.get(userId).set(updated.getId().intValue(), updated);
-        return updated;
-    }*/
 
     @Override
     public Item update(Long userId, Long itemId, Item item) {
@@ -72,18 +58,6 @@ public class ItemRepositoryImpl implements ItemRepository {
         }
         return result;
     }
-    /*@Override
-    public List<Item> findAll() {
-        List<Item> result = new ArrayList<>();
-        for (List<Item> items : storage.values()) {
-            for (Item item : items) {
-                if (Boolean.TRUE.equals(item.getAvailable())) {
-                    result.add(item);
-                }
-            }
-        }
-        return result;
-    }*/
 
     @Override
     public Item save(Item item) {
