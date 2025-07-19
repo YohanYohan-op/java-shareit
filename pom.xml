@@ -84,26 +84,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<rules>
-						<requireJavaVersion>
-							<version>[11,)</version>
-						</requireJavaVersion>
-					</rules>
-				</configuration>
-				<executions>
-					<execution>
-						<id>enforce-java</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -179,14 +159,13 @@
 						</dependency>
 					</dependencies>
 				</plugin>
-				<!--<plugin>
+				<plugin>
 					<groupId>com.github.spotbugs</groupId>
 					<artifactId>spotbugs-maven-plugin</artifactId>
 					<version>4.7.0.0</version>
 					<configuration>
 						<effort>Max</effort>
 						<threshold>High</threshold>
-						<failOnError>false</failOnError>
 					</configuration>
 					<executions>
 						<execution>
@@ -195,7 +174,7 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>-->
+				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
