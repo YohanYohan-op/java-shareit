@@ -37,9 +37,9 @@ jobs:
           ./tests/.github/workflows/build.sh
 
       - name: Install Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '12.x'
+          node-version: '18.x'
 
       - name: Install newman
         run: |
