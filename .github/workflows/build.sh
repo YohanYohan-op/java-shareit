@@ -1,1 +1,1 @@
-mvn install -P check,coverage
+mvn install -P check
