@@ -17,11 +17,11 @@ import java.time.LocalDateTime;
 public class BookingCreateDto {
 
     @NotNull(message = "Start time cannot be null")
-    @Future(message = "Start time cannot be past")
+    //@Future(message = "Start time cannot be past")
     private LocalDateTime start;
 
     @NotNull(message = "End time cannot be null")
-    @Future(message = "End time cannot be past")
+    //@Future(message = "End time cannot be past")
     private LocalDateTime end;
 
     @NotNull(message = "Item id cannot be null")
