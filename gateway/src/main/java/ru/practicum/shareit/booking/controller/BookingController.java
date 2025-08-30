@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.client.BookingClient;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
@@ -15,7 +14,6 @@ import ru.practicum.shareit.booking.model.BookingState;
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
 @Slf4j
-@Validated
 public class BookingController {
     private final BookingClient client;
 
@@ -51,7 +49,7 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> getBookingsByUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @RequestParam(required = false, defaultValue = "ALL") BookingState state,
+            @RequestParam(defaultValue = "ALL") BookingState state,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -63,7 +61,7 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsByOwner(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
-            @RequestParam(required = false, defaultValue = "ALL") BookingState state) {
+            @RequestParam(defaultValue = "ALL") BookingState state) {
 
         log.info("Gateway: list bookings for ownerId: {}, state: {}", ownerId, state);
         return client.getBookingsByOwner(ownerId, state);

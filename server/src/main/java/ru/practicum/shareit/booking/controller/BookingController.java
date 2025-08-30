@@ -50,7 +50,7 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingResponseDto>> getBookingsByUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @RequestParam(required = false, defaultValue = "ALL") BookingState state,
+            @RequestParam(defaultValue = "ALL") BookingState state,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         List<BookingResponseDto> bookings = bookingService.getBookingsByUser(userId, state, page, size);
@@ -60,7 +60,7 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<List<BookingResponseDto>> getBookingsByOwner(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
-            @RequestParam(required = false, defaultValue = "ALL") BookingState state) {
+            @RequestParam(defaultValue = "ALL") BookingState state) {
 
         List<BookingResponseDto> bookings = bookingService.getBookingsByOwner(ownerId, state);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
